@@ -40,17 +40,11 @@ test_blk(){
 tracername="blk"
 if grep -q ${tracername} ${FTRACE_PREFIX}/available_tracers; then
   starttrace ${tracername}
-  dd if=/dev/zero of=/boot/.fedorablktracetest bs=512k count=20 &>/dev/null
-  sync
-  rm /boot/.fedorablktracetest
   sleep 2
-  assertPass cat /sys/kernel/debug/tracing/trace > blktrace.log
-  assertTrue "Blktrace output less than expected" "[ $(cat blktrace.log | grep -v '#' | wc -l) -ge 4 ]"
 
   cat ${TRACE} &> /dev/null ; rtrn=$?
   assertTrue "${tracername} trace error" ${rtrn}
   stoptrace
-  rm blktrace.log -f
 else
   startSkipping
 fi
