@@ -129,5 +129,4 @@ else
 fi
 }
 
-
-. ./shunit2
+. $(dirname $0)/../lib/include
