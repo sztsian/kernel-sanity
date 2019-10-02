@@ -1,0 +1,18 @@
+#!/bin/bash
+
+KNVR=${1}
+KVer=$(echo ${KNVR} | awk -F '-' '{print $1}')
+KRel=$(echo ${KNVR} | awk -F '-' '{print $2}' | awk -F '.' '{print $(NF-1)}')
+KDist=$(echo ${KNVR} | awk -F '.' '{print $NF}')
+
+mkdir ${KNVR}
+
+for darch in armv7hl aarch64 x86_64 ; do
+    mkdir -p ${KNVR}/${darch}
+    pushd ${KNVR}/${darch}
+    wget https://kojipkgs.fedoraproject.org/packages/kernel/${KVer}/${KRel}.${KDist}/${darch}/kernel-${KNVR}.${darch}.rpm
+    wget https://kojipkgs.fedoraproject.org/packages/kernel/${KVer}/${KRel}.${KDist}/${darch}/kernel-core-${KNVR}.${darch}.rpm
+    wget https://kojipkgs.fedoraproject.org/packages/kernel/${KVer}/${KRel}.${KDist}/${darch}/kernel-modules-${KNVR}.${darch}.rpm
+    wget https://kojipkgs.fedoraproject.org/packages/kernel/${KVer}/${KRel}.${KDist}/${darch}/kernel-devel-${KNVR}.${darch}.rpm
+    popd
+done
